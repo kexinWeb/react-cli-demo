@@ -8,8 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "react-project-init": "lib/init.js",
-    "react-route-add": "lib/add.js"
+    "react-project-init": "bin/init.js",
+    "react-route-add": "bin/add.js"
   },
   "author": "liuakuo",
   "license": "ISC",
