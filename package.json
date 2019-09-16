@@ -1,6 +1,6 @@
 {
   "name": "app-cli-test",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A demo of app's cli",
   "main": "index.js",
   "scripts": {
@@ -9,7 +9,7 @@
   },
   "bin": {
     "app-cli-test init": "lib/init.js",
-    "app-cli-test add":  "lib/add.js"
+    "app-cli-test add": "lib/add.js"
   },
   "author": "liuakuo",
   "license": "ISC",
