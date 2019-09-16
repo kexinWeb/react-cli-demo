@@ -2,10 +2,10 @@ import program from 'commander'
 import inquirer from 'inquirer'
 import chalkPipe from 'chalk-pipe'
 import generate from './generate'
-import { initSrcDir, initDestDir } from './const'
+import { addSrcDir, addDestDir } from './const'
 
-console.log(initSrcDir)
-console.log(initDestDir)
+console.log(addDestDir)
+console.log(addSrcDir)
 
 let myAnswers = {}
 // commander：不同的command复制不同的文件
@@ -20,7 +20,7 @@ if (program.pizza) {
 inquirer.prompt([{
     type: 'input',
     name: 'name',
-    message: '请输入你的名字',
+    message: '请输入route的名字',
     transformer: function (name, answers, flag) {
         return chalkPipe('red.underline')(name)
     }
@@ -28,7 +28,7 @@ inquirer.prompt([{
 {
     type: 'input',
     name: 'province',
-    message: '你来自什么省份？',
+    message: '请输入route的省份？',
     transformer: function (province, answers, flag) {
         return chalkPipe('blue.underline')(province)
     }
@@ -51,5 +51,5 @@ function replacement() {
         'name.js': 'nameRenamed.js',
         'province.js': 'provinceRenamed.js'
     }
-    generate(initSrcDir, initDestDir, replacement, filenameMap)
+    generate(addSrcDir, addDestDir, replacement, filenameMap)
 }
