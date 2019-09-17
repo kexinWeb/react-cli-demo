@@ -1,6 +1,6 @@
 {
   "name": "app-cli-test",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "A demo of app's cli",
   "main": "index.js",
   "scripts": {
