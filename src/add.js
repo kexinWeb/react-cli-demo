@@ -57,7 +57,11 @@ if (!routeName) {
     })
 }
 
-
+function initSuccess(routeName, routePath) {
+    console.log(`\n\n${routeName} 路由页面创建成功，接下来你可以：`);
+    console.log('  $ npm start 开始开发');
+    console.log(`  通过 localhost:8080${routePath} 访问该路由页面`);
+}
 
 inquirer.prompt(questions)
     .then(answers => {
@@ -71,8 +75,13 @@ function replacement() {
         '__ROUTE_NAMESPACE__': myAnswers.namespace,
         '__REPLACE_ROUTE_TITLE__': myAnswers.routeTitle
     }
-
     const addDestDir = path.resolve(process.cwd(), routeName ? `app/routes/${routeName}` : `app/routes/${myAnswers.routeName}`)
 
     generate(addSrcDir, addDestDir, replacement, {})
+        .then(() => {
+            initSuccess(routeName ? routeName : myAnswers.routeName, myAnswers.routePath)
+        })
+        .catch(err => {
+            console.log(err)
+        })
 }

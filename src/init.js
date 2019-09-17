@@ -76,6 +76,12 @@ inquirer.prompt(quesions)
     })
 
 
+function initSuccess(projectName) {
+    console.log(`\n\n${projectName} 项目创建成功，接下来你可以：`);
+    console.log(`  $ cd ${projectName}`);
+    console.log('  $ npm install 安装依赖');
+    console.log('  $ npm start 开始开发');
+}
 
 function replacement() {
     // 进一步抽象
@@ -83,7 +89,14 @@ function replacement() {
         '__PROJECT_NAME__': myAnswers.name,
         '__PROJECT_DESCRIPTION__': myAnswers.description
     }
-    const initDestDir = path.resolve(process.cwd(), projectName ? projectName : myAnswers.projectName )
+    projectName = projectName ? projectName : myAnswers.projectName
+    const initDestDir = path.resolve(process.cwd(), projectName)
 
     generate(initSrcDir, initDestDir, replacement, {})
+        .then(() => {
+            initSuccess(projectName)
+        })
+        .catch(err => {
+            console.log(err)
+        })
 }
