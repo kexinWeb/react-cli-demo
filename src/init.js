@@ -2,54 +2,88 @@ import program from 'commander'
 import inquirer from 'inquirer'
 import chalkPipe from 'chalk-pipe'
 import generate from './generate'
-import { initSrcDir, initDestDir } from './const'
+import { initSrcDir } from './const'
+import path from 'path'
 
-console.log(initSrcDir)
-console.log(initDestDir)
 
 let myAnswers = {}
-// commander：不同的command复制不同的文件
-program
-    .option('-p, --pizza', 'the taste of pizza')
-    .parse(process.argv)
+let projectName = ''
 
-if (program.pizza) {
-    console.log('order a pizza')
+program
+    .arguments('<projectName>')
+    .action((name) => {
+        projectName = name;
+    });
+program.parse(process.argv);
+
+
+let quesions = [
+    {
+        type: 'input',
+        name: 'name',
+        message: '请输入项目名称',
+        default: projectName,
+        transformer: function (name, answers, flag) {
+            return chalkPipe('red.underline')(name)
+        },
+        validate(input) {
+            if (!input) {
+                return '输入不能为空（按 ctrl+c 键退出）';
+            }
+            return true;
+        },
+    },
+    {
+        type: 'input',
+        name: 'description',
+        message: '请输入项目描述',
+        default: 'A react application.',
+        transformer: function (name, answers, flag) {
+            return chalkPipe('red.underline')(name)
+        },
+        validate(input) {
+            if (!input) {
+                return '输入不能为空（按 ctrl+c 键退出）';
+            }
+            return true;
+        },
+    },
+]
+if (!projectName) {
+    quesions.unshift(
+        {
+            type: 'input',
+            name: 'projectName',
+            message: '请输入项目文件夹名称',
+            transformer: function (projectName, answers, flag) {
+                return chalkPipe('yellow.underline')(projectName)
+            },
+            validate(input) {
+                if (!input) {
+                    return '输入不能为空（按 ctrl+c 键退出）';
+                }
+                return true;
+            },
+        },
+    )
 }
 
-inquirer.prompt([{
-    type: 'input',
-    name: 'name',
-    message: '请输入你的名字',
-    transformer: function (name, answers, flag) {
-        return chalkPipe('red.underline')(name)
-    }
-},
-{
-    type: 'input',
-    name: 'province',
-    message: '你来自什么省份？',
-    transformer: function (province, answers, flag) {
-        return chalkPipe('blue.underline')(province)
-    }
-}]
-)
+inquirer.prompt(quesions)
     .then(answers => {
         myAnswers = answers
         console.log(myAnswers)
         replacement()
     })
 
+
+
 function replacement() {
     // 进一步抽象
     const replacement = {
-        '__NAME__': myAnswers.name,
-        '__PROVINCE__': myAnswers.province
+        '__PROJECT_NAME__': myAnswers.name,
+        '__PROJECT_DESCRIPTION__': myAnswers.description
     }
+    const initDestDir = path.resolve(process.cwd(), projectName ? projectName : myAnswers.projectName )
 
-    const filenameMap = {
-        'name.js': 'nameRenamed.js',
-        'province.js': 'provinceRenamed.js'
-    }
-    generate(initSrcDir, initDestDir, replacement, filenameMap)
+    generate(initSrcDir, initDestDir, replacement, {})
 }

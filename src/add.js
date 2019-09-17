@@ -2,54 +2,77 @@ import program from 'commander'
 import inquirer from 'inquirer'
 import chalkPipe from 'chalk-pipe'
 import generate from './generate'
-import { addSrcDir, addDestDir } from './const'
+import { addSrcDir } from './const'
+import path from 'path'
 
-console.log(addDestDir)
-console.log(addSrcDir)
 
 let myAnswers = {}
-// commander：不同的command复制不同的文件
-program
-    .option('-p, --pizza', 'the taste of pizza')
-    .parse(process.argv)
+let routeName
 
-if (program.pizza) {
-    console.log('order a pizza')
+program
+    .arguments('<routeName>')
+    .action((name) => {
+        routeName = name;
+    });
+program.parse(process.argv);
+
+
+const questions = [{
+    type: 'input',
+    name: 'routePath',
+    message: '请输入路由访问的 PATH（如：/index）',
+    validate(input) {
+        if (!input) {
+            return '输入不能为空（按 ctrl+c 键退出）';
+        }
+        return true;
+    },
+},
+    {
+        type: 'input',
+        name: 'routeTitle',
+        message: '请输入路由名称（如：首页）',
+    },
+    {
+        type: 'input',
+        name: 'namespace',
+        message: '请输入该页面组件的namespace（如：index）',
+    },
+]
+
+if (!routeName) {
+    questions.unshift({
+        type: 'input',
+        name: 'routeName',
+        message: '请输入路由页面的名称，它将作为文件夹名（如: index）',
+        transformer: function (routeName, answers, flag) {
+            return chalkPipe('red.underline')(routeName)
+        },
+        validate(input) {
+            if (!input) {
+                return '输入不能为空（按 ctrl+c 键退出）';
+            }
+            return true;
+        },
+    })
 }
 
-inquirer.prompt([{
-    type: 'input',
-    name: 'name',
-    message: '请输入route的名字',
-    transformer: function (name, answers, flag) {
-        return chalkPipe('red.underline')(name)
-    }
-},
-{
-    type: 'input',
-    name: 'province',
-    message: '请输入route的省份？',
-    transformer: function (province, answers, flag) {
-        return chalkPipe('blue.underline')(province)
-    }
-}]
-)
+
+
+inquirer.prompt(questions)
     .then(answers => {
         myAnswers = answers
-        console.log(myAnswers)
         replacement()
     })
 
 function replacement() {
-    // 进一步抽象
     const replacement = {
-        '__NAME__': myAnswers.name,
-        '__PROVINCE__': myAnswers.province
+        '__ROUTE_PATH__': myAnswers.routePath,
+        '__ROUTE_NAMESPACE__': myAnswers.namespace,
+        '__REPLACE_ROUTE_TITLE__': myAnswers.routeTitle
     }
 
-    const filenameMap = {
-        'name.js': 'nameRenamed.js',
-        'province.js': 'provinceRenamed.js'
-    }
-    generate(addSrcDir, addDestDir, replacement, filenameMap)
+    const addDestDir = path.resolve(process.cwd(), routeName ? `app/routes/${routeName}` : `app/routes/${myAnswers.routeName}`)
+
+    generate(addSrcDir, addDestDir, replacement, {})
 }

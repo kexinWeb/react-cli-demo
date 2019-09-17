@@ -8,10 +8,10 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "react-project-init": "bin/init.js",
-    "react-route-add": "bin/add.js"
+    "biubiubiu-init": "bin/init.js",
+    "biubiubiu-add": "bin/add.js"
   },
-  "author": "liuakuo",
+  "author": "Liu Akuo",
   "license": "ISC",
   "dependencies": {
     "chalk-pipe": "^2.0.0",
