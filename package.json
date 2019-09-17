@@ -1,15 +1,15 @@
 {
-  "name": "app-cli-test",
-  "version": "1.0.13",
-  "description": "A demo of app's cli",
+  "name": "react-biu",
+  "version": "1.0.0",
+  "description": "A demo of a React app's cli",
   "main": "index.js",
   "scripts": {
     "build": "babel ./src -d lib --ignore __tests__,__demo__",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "biubiubiu-init": "bin/init.js",
-    "biubiubiu-add": "bin/add.js"
+    "react-biu-init": "bin/init.js",
+    "react-biu-add": "bin/add.js"
   },
   "author": "Liu Akuo",
   "license": "ISC",
