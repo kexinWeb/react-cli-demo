@@ -84,7 +84,6 @@ function initSuccess(projectName) {
 }
 
 function replacement() {
-    // 进一步抽象
     const replacement = {
         '__PROJECT_NAME__': myAnswers.name,
         '__PROJECT_DESCRIPTION__': myAnswers.description
